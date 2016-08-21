@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "617318554839",
+    "firebase_url": "https://flashcards-8ce7c.firebaseio.com",
+    "project_id": "flashcards-8ce7c",
+    "storage_bucket": "flashcards-8ce7c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:617318554839:android:99e3a25a8aebd225",
+        "android_client_info": {
+          "package_name": "com.sorcery.flashcards"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "617318554839-f0ce3vu5d96j18b5m3i7l2uhqssbho8f.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.sorcery.flashcards",
+            "certificate_hash": "D98BD07CEBE41FD4D0C02D4F9F53B08B926B2B40"
+          }
+        },
+        {
+          "client_id": "617318554839-4cl4tup6qiblv0902edi71mcalaf31o8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyANsTbTOZNvzfHRg57CyeekSFUq1XZ-34s"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "617318554839-4cl4tup6qiblv0902edi71mcalaf31o8.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
