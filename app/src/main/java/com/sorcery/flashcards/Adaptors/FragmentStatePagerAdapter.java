@@ -34,7 +34,8 @@ public class FragmentStatePagerAdapter extends FragmentPagerAdapter {
     }
 
     public void addCard(CardModel card) {
-        cards.add(card);
+        if (!cards.contains(card))
+            cards.add(card);
         notifyDataSetChanged();
     }
 

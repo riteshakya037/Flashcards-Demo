@@ -47,7 +47,7 @@
                 android:background="@color/colorPrimaryDark" />
 
             <com.balysv.materialripple.MaterialRippleLayout
-                android:id="@+id/bSearch"
+                android:id="@+id/pronunciationBtn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:clickable="true"

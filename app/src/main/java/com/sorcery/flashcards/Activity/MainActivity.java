@@ -1,7 +1,6 @@
 package com.sorcery.flashcards.Activity;
 
 import android.os.Bundle;
-import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.SpannableString;
@@ -17,7 +16,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
 import com.sorcery.flashcards.Adaptors.FragmentStatePagerAdapter;
 import com.sorcery.flashcards.Adaptors.ZoomOutPageTransformer;
 import com.sorcery.flashcards.CustomViews.MultiViewPager;
@@ -31,9 +29,8 @@ public class MainActivity extends AppCompatActivity {
 
     private DatabaseReference databaseRef;
 
-    private StorageReference storageRef;
     /**
-     * The {@link ViewPager} that will host the section contents.
+     * The {@link MultiViewPager} that will host the section contents.
      */
     private MultiViewPager mViewPager;
 
@@ -71,7 +68,6 @@ public class MainActivity extends AppCompatActivity {
         // Get the Firebase app and all primitives we'll use
         app = FirebaseApp.getInstance();
         database = FirebaseDatabase.getInstance(app);
-        database.setPersistenceEnabled(true);
         storage = FirebaseStorage.getInstance(app);
 
         // Get a reference to cards in the database
