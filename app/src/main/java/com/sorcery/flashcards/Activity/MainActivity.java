@@ -15,7 +15,6 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.storage.FirebaseStorage;
 import com.sorcery.flashcards.Adaptors.FragmentStatePagerAdapter;
 import com.sorcery.flashcards.Adaptors.ZoomOutPageTransformer;
 import com.sorcery.flashcards.CustomViews.MultiViewPager;
@@ -25,7 +24,6 @@ import com.sorcery.flashcards.R;
 public class MainActivity extends AppCompatActivity {
     private FirebaseApp app;
     private FirebaseDatabase database;
-    private FirebaseStorage storage;
 
     private DatabaseReference databaseRef;
 
@@ -59,17 +57,16 @@ public class MainActivity extends AppCompatActivity {
         // Set up the ViewPager with the sections adapter.
         mViewPager = (MultiViewPager) findViewById(R.id.pager);
 
-        final FragmentStatePagerAdapter adapter = new FragmentStatePagerAdapter(getSupportFragmentManager());
-
-        mViewPager.setAdapter(adapter);
-        mViewPager.setPageTransformer(true, new ZoomOutPageTransformer());
 
 
         // Get the Firebase app and all primitives we'll use
         app = FirebaseApp.getInstance();
         database = FirebaseDatabase.getInstance(app);
-        storage = FirebaseStorage.getInstance(app);
 
+        final FragmentStatePagerAdapter adapter = new FragmentStatePagerAdapter(getSupportFragmentManager());
+
+        mViewPager.setAdapter(adapter);
+        mViewPager.setPageTransformer(true, new ZoomOutPageTransformer());
         // Get a reference to cards in the database
         databaseRef = database.getReference("cards");
         databaseRef.addChildEventListener(new ChildEventListener() {

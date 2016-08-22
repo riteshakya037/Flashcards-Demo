@@ -25,7 +25,6 @@ dependencies {
     compile 'com.android.support:design:24.1.1'
     compile 'com.google.firebase:firebase-core:9.4.0'
     compile 'com.google.firebase:firebase-database:9.4.0'
-    compile 'com.google.firebase:firebase-storage:9.4.0'
     compile 'com.android.support:cardview-v7:24.1.1'
     compile 'com.balysv:material-ripple:1.0.2'
     compile 'com.android.support:support-v4:24.1.1'
