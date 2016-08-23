@@ -113,8 +113,11 @@ public class DatabaseContract {
                     null
             );
             if (res.moveToFirst()) {
-                return res.getString(res.getColumnIndex((CollectionEntry.COLUMN_NAME_CACHE_LINK)));
+                String returnValue = res.getString(res.getColumnIndex((CollectionEntry.COLUMN_NAME_CACHE_LINK)));
+                res.close();
+                return returnValue;
             } else {
+                res.close();
                 return null;
             }
         }
@@ -142,9 +145,9 @@ public class DatabaseContract {
                     sortOrder,
                     null
             );
-            res.moveToFirst();
-
-            return res.moveToFirst();
+            boolean returnValue = res.moveToFirst();
+            res.close();
+            return returnValue;
         }
 
     }

@@ -1,4 +1,4 @@
-package com.sorcery.flashcards.Activity;
+package com.sorcery.flashcards.Activities;
 
 import android.app.Application;
 

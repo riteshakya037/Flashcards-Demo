@@ -4,7 +4,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
-import com.sorcery.flashcards.Activity.ScreenSlidePageFragment;
+import com.sorcery.flashcards.Activities.ScreenSlidePageFragment;
 import com.sorcery.flashcards.Model.CardModel;
 
 import java.util.ArrayList;
@@ -16,8 +16,8 @@ import java.util.ArrayList;
  */
 public class FragmentStatePagerAdapter extends FragmentPagerAdapter {
 
-    private ArrayList<CardModel> cards;
-    private EmptyInterface anInterface;
+    private final ArrayList<CardModel> cards;
+    private final EmptyInterface anInterface;
 
     public FragmentStatePagerAdapter(FragmentManager fm, EmptyInterface anInterface) {
         super(fm);
@@ -27,7 +27,7 @@ public class FragmentStatePagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public Fragment getItem(int position) {
-        return ScreenSlidePageFragment.newInstance(position, cards.get(position));
+        return ScreenSlidePageFragment.newInstance(cards.get(position));
     }
 
     @Override
@@ -54,6 +54,6 @@ public class FragmentStatePagerAdapter extends FragmentPagerAdapter {
     }
 
     public interface EmptyInterface {
-        public void isEmpty(boolean isEmpty);
+        void isEmpty(boolean isEmpty);
     }
 }

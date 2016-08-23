@@ -2,6 +2,7 @@ package com.sorcery.flashcards.Model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.test.suitebuilder.annotation.Suppress;
 
 /**
  * Created by Ritesh Shakya on 8/21/2016.

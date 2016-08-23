@@ -18,17 +18,12 @@ import java.net.URLConnection;
 public class DownloadMp3Async extends AsyncTask<String, String, String> {
 
 
-    private Context context;
-    String firebaseLink;
+    private final Context context;
+    private String firebaseLink;
     private String TAG = "DownloadMp3Async";
 
     public DownloadMp3Async(Context context) {
         this.context = context;
-    }
-
-    @Override
-    protected void onPreExecute() {
-        super.onPreExecute();
     }
 
     @Override
@@ -40,7 +35,7 @@ public class DownloadMp3Async extends AsyncTask<String, String, String> {
             URL url = new URL(firebaseLink);
             URLConnection connection = url.openConnection();
             connection.connect();
-            String outputDirectory = context.getCacheDir() + File.separator + substringBetween(firebaseLink, "mp3Storage%2", "?alt=");
+            String outputDirectory = context.getCacheDir() + File.separator + substringBetween(firebaseLink);
             InputStream input = new BufferedInputStream(url.openStream());
             OutputStream output = new FileOutputStream(outputDirectory);
 
@@ -59,8 +54,8 @@ public class DownloadMp3Async extends AsyncTask<String, String, String> {
 
     }
 
-    private String substringBetween(String mainString, String leftString, String rightString) {
-        return mainString.substring(mainString.indexOf(leftString) + leftString.length(), mainString.indexOf(rightString));
+    private String substringBetween(String mainString) {
+        return mainString.substring(mainString.indexOf("mp3Storage%2") + "mp3Storage%2".length(), mainString.indexOf("?alt="));
     }
 
     @Override

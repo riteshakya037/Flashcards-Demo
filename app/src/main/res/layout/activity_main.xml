@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:background="@drawable/gradient_background"
     android:fitsSystemWindows="true"
-    tools:context="com.sorcery.flashcards.Activity.MainActivity">
+    tools:context="com.sorcery.flashcards.Activities.MainActivity">
 
 
     <com.sorcery.flashcards.CustomViews.MultiViewPager
@@ -21,7 +21,7 @@
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_gravity="center"
-        app:type="folding_circles" />
+        app:type="chrome_floating_circles" />
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/appbar"

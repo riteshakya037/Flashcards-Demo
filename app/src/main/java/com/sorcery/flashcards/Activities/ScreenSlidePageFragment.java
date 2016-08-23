@@ -1,5 +1,6 @@
-package com.sorcery.flashcards.Activity;
+package com.sorcery.flashcards.Activities;
 
+import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -27,10 +28,8 @@ public class ScreenSlidePageFragment extends Fragment {
      * The fragment argument representing the section number for this
      * fragment.
      */
-    private static final String ARG_SECTION_NUMBER = "section_number";
     private static final String ARG_CARD = "section_card";
     private CardModel cardModel;
-    private int sectionNumber;
 
     public ScreenSlidePageFragment() {
     }
@@ -39,10 +38,9 @@ public class ScreenSlidePageFragment extends Fragment {
      * Returns a new instance of this fragment for the given section
      * number.
      */
-    public static ScreenSlidePageFragment newInstance(int sectionNumber, CardModel cardModel) {
+    public static ScreenSlidePageFragment newInstance(CardModel cardModel) {
         ScreenSlidePageFragment fragment = new ScreenSlidePageFragment();
         Bundle args = new Bundle();
-        args.putInt(ARG_SECTION_NUMBER, sectionNumber);
         args.putParcelable(ARG_CARD, cardModel);
         fragment.setArguments(args);
         return fragment;
@@ -52,7 +50,6 @@ public class ScreenSlidePageFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            sectionNumber = getArguments().getInt(ARG_SECTION_NUMBER);
             cardModel = getArguments().getParcelable(ARG_CARD);
         }
     }

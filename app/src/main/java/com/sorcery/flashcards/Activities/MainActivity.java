@@ -1,11 +1,7 @@
-package com.sorcery.flashcards.Activity;
+package com.sorcery.flashcards.Activities;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-import android.text.SpannableString;
-import android.text.Spanned;
-import android.text.style.TypefaceSpan;
 import android.view.View;
 import android.view.Window;
 
@@ -25,15 +21,8 @@ import com.sorcery.flashcards.Model.CardModel;
 import com.sorcery.flashcards.R;
 
 public class MainActivity extends AppCompatActivity implements FragmentStatePagerAdapter.EmptyInterface {
-    private FirebaseApp app;
-    private FirebaseDatabase database;
-    GoogleProgressBar googleProgressBar;
-    private DatabaseReference databaseRef;
+    private GoogleProgressBar googleProgressBar;
     private DatabaseContract.DbHelper dbHelper;
-    /**
-     * The {@link MultiViewPager} that will host the section contents.
-     */
-    private MultiViewPager mViewPager;
     private String TAG = "MainActivity";
 
     public MainActivity() {
@@ -46,12 +35,12 @@ public class MainActivity extends AppCompatActivity implements FragmentStatePage
         setContentView(R.layout.activity_main);
 
         // Set up the ViewPager with the sections adapter.
-        mViewPager = (MultiViewPager) findViewById(R.id.pager);
+        MultiViewPager mViewPager = (MultiViewPager) findViewById(R.id.pager);
 
 
         // Get the Firebase app and all primitives we'll use
-        app = FirebaseApp.getInstance();
-        database = FirebaseDatabase.getInstance(app);
+        FirebaseApp app = FirebaseApp.getInstance();
+        FirebaseDatabase database = FirebaseDatabase.getInstance(app);
 
         // Instantiate local Database
         dbHelper = new DatabaseContract.DbHelper(this);
@@ -62,7 +51,7 @@ public class MainActivity extends AppCompatActivity implements FragmentStatePage
         mViewPager.setAdapter(adapter);
         mViewPager.setPageTransformer(true, new ZoomOutPageTransformer());
         // Get a reference to cards in the database
-        databaseRef = database.getReference("cards");
+        DatabaseReference databaseRef = database.getReference("cards");
         databaseRef.addChildEventListener(new ChildEventListener() {
             public void onChildAdded(DataSnapshot snapshot, String s) {
                 // Get the card from the snapshot and add it to the UI

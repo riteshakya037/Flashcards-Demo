@@ -12,7 +12,7 @@ import android.view.WindowManager;
  */
 public class Utils {
 
-    private Context _context;
+    private final Context _context;
 
     // constructor
     public Utils(Context context) {
