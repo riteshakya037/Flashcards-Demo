@@ -6,9 +6,8 @@ import android.support.v7.widget.Toolbar;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.style.TypefaceSpan;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.database.ChildEventListener;
@@ -20,6 +19,8 @@ import com.jpardogo.android.googleprogressbar.library.GoogleProgressBar;
 import com.sorcery.flashcards.Adaptors.FragmentStatePagerAdapter;
 import com.sorcery.flashcards.Adaptors.ZoomOutPageTransformer;
 import com.sorcery.flashcards.CustomViews.MultiViewPager;
+import com.sorcery.flashcards.Helper.DatabaseContract;
+import com.sorcery.flashcards.Helper.DownloadMp3Async;
 import com.sorcery.flashcards.Model.CardModel;
 import com.sorcery.flashcards.R;
 
@@ -28,11 +29,12 @@ public class MainActivity extends AppCompatActivity implements FragmentStatePage
     private FirebaseDatabase database;
     GoogleProgressBar googleProgressBar;
     private DatabaseReference databaseRef;
-
+    private DatabaseContract.DbHelper dbHelper;
     /**
      * The {@link MultiViewPager} that will host the section contents.
      */
     private MultiViewPager mViewPager;
+    private String TAG = "MainActivity";
 
     public MainActivity() {
     }
@@ -40,21 +42,8 @@ public class MainActivity extends AppCompatActivity implements FragmentStatePage
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_main);
-
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        SpannableString title = new SpannableString(getResources().getString(R.string.app_name));
-
-        // Add a span for the sans-serif-light font
-        title.setSpan(
-                new TypefaceSpan("sans-serif-light"),
-                0,
-                title.length(),
-                Spanned.SPAN_INCLUSIVE_INCLUSIVE);
-
-        toolbar.setTitle(title);
-        setSupportActionBar(toolbar);
-
 
         // Set up the ViewPager with the sections adapter.
         mViewPager = (MultiViewPager) findViewById(R.id.pager);
@@ -63,6 +52,10 @@ public class MainActivity extends AppCompatActivity implements FragmentStatePage
         // Get the Firebase app and all primitives we'll use
         app = FirebaseApp.getInstance();
         database = FirebaseDatabase.getInstance(app);
+
+        // Instantiate local Database
+        dbHelper = new DatabaseContract.DbHelper(this);
+
 
         final FragmentStatePagerAdapter adapter = new FragmentStatePagerAdapter(getSupportFragmentManager(), this);
 
@@ -75,6 +68,10 @@ public class MainActivity extends AppCompatActivity implements FragmentStatePage
                 // Get the card from the snapshot and add it to the UI
                 CardModel card = snapshot.getValue(CardModel.class);
                 adapter.addCard(card);
+                if (!dbHelper.checkExist(card.voiceMale)) {
+                    DownloadMp3Async mp3Async = new DownloadMp3Async(MainActivity.this);
+                    mp3Async.execute(card.voiceMale);
+                }
             }
 
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
@@ -84,6 +81,9 @@ public class MainActivity extends AppCompatActivity implements FragmentStatePage
                 // Get the card from the snapshot and remove it to the UI
                 CardModel card = dataSnapshot.getValue(CardModel.class);
                 adapter.removeCard(card);
+                if (dbHelper.checkExist(card.voiceMale)) {
+                    dbHelper.onDelete(card.voiceMale);
+                }
             }
 
             public void onChildMoved(DataSnapshot dataSnapshot, String s) {
@@ -95,28 +95,28 @@ public class MainActivity extends AppCompatActivity implements FragmentStatePage
         googleProgressBar = (GoogleProgressBar) findViewById(R.id.google_progress);
     }
 
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
+//
+//    @Override
+//    public boolean onCreateOptionsMenu(Menu menu) {
+//        // Inflate the menu; this adds items to the action bar if it is present.
+//        getMenuInflater().inflate(R.menu.menu_main, menu);
+//        return true;
+//    }
+//
+//    @Override
+//    public boolean onOptionsItemSelected(MenuItem item) {
+//        // Handle action bar item clicks here. The action bar will
+//        // automatically handle clicks on the Home/Up button, so long
+//        // as you specify a parent activity in AndroidManifest.xml.
+//        int id = item.getItemId();
+//
+//        //noinspection SimplifiableIfStatement
+//        if (id == R.id.action_settings) {
+//            return true;
+//        }
+//
+//        return super.onOptionsItemSelected(item);
+//    }
 
     @Override
     public void isEmpty(boolean isEmpty) {

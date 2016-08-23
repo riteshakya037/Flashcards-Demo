@@ -42,7 +42,7 @@ public class FragmentStatePagerAdapter extends FragmentPagerAdapter {
         if (cards.size()>0){
             anInterface.isEmpty(false);
         }
-        notifyDataSetChanged();
+        this.notifyDataSetChanged();
     }
 
     public void removeCard(CardModel card) {
@@ -50,7 +50,7 @@ public class FragmentStatePagerAdapter extends FragmentPagerAdapter {
         if (cards.size()==0){
             anInterface.isEmpty(true);
         }
-        notifyDataSetChanged();
+        this.notifyDataSetChanged();
     }
 
     public interface EmptyInterface {

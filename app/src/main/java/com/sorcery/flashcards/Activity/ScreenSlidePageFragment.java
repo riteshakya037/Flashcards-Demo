@@ -11,6 +11,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.balysv.materialripple.MaterialRippleLayout;
+import com.sorcery.flashcards.Helper.DatabaseContract;
 import com.sorcery.flashcards.Helper.Utils;
 import com.sorcery.flashcards.Model.CardModel;
 import com.sorcery.flashcards.R;
@@ -72,7 +73,12 @@ public class ScreenSlidePageFragment extends Fragment {
         pronunciationBtn.setEnabled(false);
         final MediaPlayer mp = new MediaPlayer();
         try {
-            mp.setDataSource(cardModel.voiceMale);
+            DatabaseContract.DbHelper dbHelper = new DatabaseContract.DbHelper(getActivity());
+            if (dbHelper.checkExist(cardModel.voiceMale)) {
+                mp.setDataSource(dbHelper.onSelect(cardModel.voiceMale));
+            } else {
+                mp.setDataSource(cardModel.voiceMale);
+            }
             mp.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
                 @Override
                 public void onPrepared(MediaPlayer mediaPlayer) {

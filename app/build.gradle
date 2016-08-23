@@ -28,6 +28,8 @@ dependencies {
     compile 'com.android.support:cardview-v7:24.1.1'
     compile 'com.balysv:material-ripple:1.0.2'
     compile 'com.android.support:support-v4:24.1.1'
-    compile 'com.jpardogo.googleprogressbar:library:1.2.0'}
+    compile 'com.jpardogo.googleprogressbar:library:1.2.0'
+    testCompile 'junit:junit:4.12'
+}
 apply plugin: 'com.google.gms.google-services'
 
