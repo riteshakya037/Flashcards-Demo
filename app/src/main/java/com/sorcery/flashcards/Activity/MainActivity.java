@@ -8,6 +8,7 @@ import android.text.Spanned;
 import android.text.style.TypefaceSpan;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.database.ChildEventListener;
@@ -15,16 +16,17 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.jpardogo.android.googleprogressbar.library.GoogleProgressBar;
 import com.sorcery.flashcards.Adaptors.FragmentStatePagerAdapter;
 import com.sorcery.flashcards.Adaptors.ZoomOutPageTransformer;
 import com.sorcery.flashcards.CustomViews.MultiViewPager;
 import com.sorcery.flashcards.Model.CardModel;
 import com.sorcery.flashcards.R;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements FragmentStatePagerAdapter.EmptyInterface {
     private FirebaseApp app;
     private FirebaseDatabase database;
-
+    GoogleProgressBar googleProgressBar;
     private DatabaseReference databaseRef;
 
     /**
@@ -58,12 +60,11 @@ public class MainActivity extends AppCompatActivity {
         mViewPager = (MultiViewPager) findViewById(R.id.pager);
 
 
-
         // Get the Firebase app and all primitives we'll use
         app = FirebaseApp.getInstance();
         database = FirebaseDatabase.getInstance(app);
 
-        final FragmentStatePagerAdapter adapter = new FragmentStatePagerAdapter(getSupportFragmentManager());
+        final FragmentStatePagerAdapter adapter = new FragmentStatePagerAdapter(getSupportFragmentManager(), this);
 
         mViewPager.setAdapter(adapter);
         mViewPager.setPageTransformer(true, new ZoomOutPageTransformer());
@@ -91,6 +92,7 @@ public class MainActivity extends AppCompatActivity {
             public void onCancelled(DatabaseError databaseError) {
             }
         });
+        googleProgressBar = (GoogleProgressBar) findViewById(R.id.google_progress);
     }
 
 
@@ -114,5 +116,10 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void isEmpty(boolean isEmpty) {
+        googleProgressBar.setVisibility(isEmpty ? View.VISIBLE : View.GONE);
     }
 }

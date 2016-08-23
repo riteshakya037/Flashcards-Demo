@@ -17,9 +17,11 @@ import java.util.ArrayList;
 public class FragmentStatePagerAdapter extends FragmentPagerAdapter {
 
     private ArrayList<CardModel> cards;
+    private EmptyInterface anInterface;
 
-    public FragmentStatePagerAdapter(FragmentManager fm) {
+    public FragmentStatePagerAdapter(FragmentManager fm, EmptyInterface anInterface) {
         super(fm);
+        this.anInterface = anInterface;
         cards = new ArrayList<>();
     }
 
@@ -34,13 +36,24 @@ public class FragmentStatePagerAdapter extends FragmentPagerAdapter {
     }
 
     public void addCard(CardModel card) {
-        if (!cards.contains(card))
+        if (!cards.contains(card)) {
             cards.add(card);
+        }
+        if (cards.size()>0){
+            anInterface.isEmpty(false);
+        }
         notifyDataSetChanged();
     }
 
     public void removeCard(CardModel card) {
         cards.remove(card);
+        if (cards.size()==0){
+            anInterface.isEmpty(true);
+        }
         notifyDataSetChanged();
+    }
+
+    public interface EmptyInterface {
+        public void isEmpty(boolean isEmpty);
     }
 }
