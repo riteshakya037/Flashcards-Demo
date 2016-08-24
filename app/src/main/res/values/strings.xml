@@ -3,4 +3,8 @@
     <string name="action_settings">Settings</string>
     <string name="pronunciation">Pronunciation</string>
     <string name="play_button">Play Button</string>
+    <string name="permission_internet_rationale">Internet Acess needed to fetch flash card data.</string>
+    <string name="ok">OK</string>
+    <string name="permision_available_internet">Internet permission is available, getting data.</string>
+    <string name="permissions_not_granted_internet">Internet Permisson not granted.</string>
 </resources>

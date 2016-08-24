@@ -1,10 +1,8 @@
 package com.sorcery.flashcards.Activities;
 
-import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +10,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.balysv.materialripple.MaterialRippleLayout;
+import com.sorcery.flashcards.CustomViews.FlipAnimation;
 import com.sorcery.flashcards.Helper.DatabaseContract;
 import com.sorcery.flashcards.Helper.Utils;
 import com.sorcery.flashcards.Model.CardModel;
@@ -23,7 +22,7 @@ import java.io.IOException;
  * Created by Ritesh Shakya on 8/21/2016.
  * A placeholder fragment containing a simple view.
  */
-public class ScreenSlidePageFragment extends Fragment {
+public class ScreenSlidePageFragment extends Fragment implements View.OnClickListener {
     /**
      * The fragment argument representing the section number for this
      * fragment.
@@ -60,12 +59,14 @@ public class ScreenSlidePageFragment extends Fragment {
         final Utils utils = new Utils(getActivity());
 
         View rootView = inflater.inflate(R.layout.cards_fragment, container, false);
-        CardView relativeLayout = (CardView) rootView.findViewById(R.id.vg_cover);
+        RelativeLayout relativeLayout = (RelativeLayout) rootView.findViewById(R.id.vg_cover);
 
         RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) relativeLayout.getLayoutParams();
         layoutParams.width = (int) (utils.getScreenWidth() * .8f);
-        TextView greekWord = (TextView) rootView.findViewById(R.id.greekWord);
-        TextView englishWord = (TextView) rootView.findViewById(R.id.englishWord);
+        relativeLayout.setOnClickListener(this);
+
+        TextView frontText = (TextView) rootView.findViewById(R.id.frontText);
+        TextView backText = (TextView) rootView.findViewById(R.id.backText);
         final MaterialRippleLayout pronunciationBtn = (MaterialRippleLayout) rootView.findViewById(R.id.pronunciationBtn);
         pronunciationBtn.setEnabled(false);
         final MediaPlayer mp = new MediaPlayer();
@@ -93,8 +94,8 @@ public class ScreenSlidePageFragment extends Fragment {
             e.printStackTrace();
         }
 
-        greekWord.setText(cardModel.greekWord);
-        englishWord.setText(cardModel.englishWord);
+        frontText.setText(cardModel.greekWord);
+        backText.setText(cardModel.englishWord);
         pronunciationBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -102,5 +103,24 @@ public class ScreenSlidePageFragment extends Fragment {
             }
         });
         return rootView;
+    }
+
+    @Override
+    public void onClick(View view) {
+        if (view.getId() == R.id.vg_cover)
+            flipCard();
+    }
+
+    private void flipCard() {
+        View rootLayout = getView().findViewById(R.id.vg_cover);
+        View cardFace = getView().findViewById(R.id.cardFront);
+        View cardBack = getView().findViewById(R.id.cardBack);
+
+        FlipAnimation flipAnimation = new FlipAnimation(cardFace, cardBack);
+
+        if (cardFace.getVisibility() == View.GONE) {
+            flipAnimation.reverse();
+        }
+        rootLayout.startAnimation(flipAnimation);
     }
 }
