@@ -1,5 +1,6 @@
 package com.sorcery.flashcards.Activities;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -15,15 +16,24 @@ import com.jpardogo.android.googleprogressbar.library.GoogleProgressBar;
 import com.sorcery.flashcards.Adaptors.FragmentStatePagerAdapter;
 import com.sorcery.flashcards.Adaptors.ZoomOutPageTransformer;
 import com.sorcery.flashcards.CustomViews.MultiViewPager;
+import com.sorcery.flashcards.CustomViews.WelcomeScreen.WelcomeDialog;
 import com.sorcery.flashcards.Helper.DatabaseContract;
 import com.sorcery.flashcards.Helper.DownloadMp3Async;
 import com.sorcery.flashcards.Model.CardModel;
 import com.sorcery.flashcards.R;
 
-public class MainActivity extends AppCompatActivity implements FragmentStatePagerAdapter.EmptyInterface {
+public class MainActivity extends AppCompatActivity implements FragmentStatePagerAdapter.EmptyInterface, WelcomeDialog.ClickInterface {
     private GoogleProgressBar googleProgressBar;
     private DatabaseContract.DbHelper dbHelper;
     private String TAG = "MainActivity";
+    SharedPreferences mPrefs;
+    final String PREFS_NAME = "FlashPrefs";
+    private static final String VAL_CURRENT_MODE = "current_mode";
+    private static final String VAL_FIRST_RUN = "first_run";
+    private static final String ENG_MODE = "english_mode";
+    private static final String GREEK_MODE = "greek_mode";
+    public static String current_mode;
+    FragmentStatePagerAdapter adapter;
 
     public MainActivity() {
     }
@@ -33,6 +43,12 @@ public class MainActivity extends AppCompatActivity implements FragmentStatePage
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_main);
+
+        mPrefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+//        if (mPrefs.getBoolean(VAL_FIRST_RUN, true)) {
+        WelcomeDialog dialog = new WelcomeDialog(this);
+        dialog.show();
+//        }
 
         // Set up the ViewPager with the sections adapter.
         MultiViewPager mViewPager = (MultiViewPager) findViewById(R.id.pager);
@@ -46,7 +62,7 @@ public class MainActivity extends AppCompatActivity implements FragmentStatePage
         dbHelper = new DatabaseContract.DbHelper(this);
 
 
-        final FragmentStatePagerAdapter adapter = new FragmentStatePagerAdapter(getSupportFragmentManager(), this);
+        adapter = new FragmentStatePagerAdapter(getSupportFragmentManager(), this);
 
         mViewPager.setAdapter(adapter);
         mViewPager.setPageTransformer(true, new ZoomOutPageTransformer());
@@ -84,31 +100,14 @@ public class MainActivity extends AppCompatActivity implements FragmentStatePage
         googleProgressBar = (GoogleProgressBar) findViewById(R.id.google_progress);
     }
 
-//
-//    @Override
-//    public boolean onCreateOptionsMenu(Menu menu) {
-//        // Inflate the menu; this adds items to the action bar if it is present.
-//        getMenuInflater().inflate(R.menu.menu_main, menu);
-//        return true;
-//    }
-//
-//    @Override
-//    public boolean onOptionsItemSelected(MenuItem item) {
-//        // Handle action bar item clicks here. The action bar will
-//        // automatically handle clicks on the Home/Up button, so long
-//        // as you specify a parent activity in AndroidManifest.xml.
-//        int id = item.getItemId();
-//
-//        //noinspection SimplifiableIfStatement
-//        if (id == R.id.action_settings) {
-//            return true;
-//        }
-//
-//        return super.onOptionsItemSelected(item);
-//    }
-
     @Override
     public void isEmpty(boolean isEmpty) {
         googleProgressBar.setVisibility(isEmpty ? View.VISIBLE : View.GONE);
+    }
+
+    @Override
+    public void onSelect(String currentMode) {
+        current_mode = currentMode;
+//        adapter.notifyDataSetChanged();
     }
 }

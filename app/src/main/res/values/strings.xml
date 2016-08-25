@@ -8,4 +8,6 @@
     <string name="permision_available_internet">Internet permission is available, getting data.</string>
     <string name="permissions_not_granted_internet">Internet Permisson not granted.</string>
     <string name="click_to_flip_card">(Click to flip card)</string>
+    <string name="greek">Greek</string>
+    <string name="english">English</string>
 </resources>
