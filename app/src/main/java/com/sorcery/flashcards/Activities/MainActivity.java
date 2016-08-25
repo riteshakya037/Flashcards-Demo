@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.Window;
+import android.widget.ImageButton;
+import android.widget.TextView;
 
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.database.ChildEventListener;
@@ -20,9 +22,10 @@ import com.sorcery.flashcards.CustomViews.WelcomeScreen.WelcomeDialog;
 import com.sorcery.flashcards.Helper.DatabaseContract;
 import com.sorcery.flashcards.Helper.DownloadMp3Async;
 import com.sorcery.flashcards.Model.CardModel;
+import com.sorcery.flashcards.Model.CurrentMode;
 import com.sorcery.flashcards.R;
 
-public class MainActivity extends AppCompatActivity implements FragmentStatePagerAdapter.EmptyInterface, WelcomeDialog.ClickInterface {
+public class MainActivity extends AppCompatActivity implements FragmentStatePagerAdapter.EmptyInterface, WelcomeDialog.ClickInterface, View.OnClickListener {
     private GoogleProgressBar googleProgressBar;
     private DatabaseContract.DbHelper dbHelper;
     private String TAG = "MainActivity";
@@ -30,10 +33,11 @@ public class MainActivity extends AppCompatActivity implements FragmentStatePage
     final String PREFS_NAME = "FlashPrefs";
     private static final String VAL_CURRENT_MODE = "current_mode";
     private static final String VAL_FIRST_RUN = "first_run";
-    private static final String ENG_MODE = "english_mode";
-    private static final String GREEK_MODE = "greek_mode";
-    public static String current_mode;
+
+    public static CurrentMode current_mode;
     FragmentStatePagerAdapter adapter;
+    private ImageButton switchMode;
+    private TextView actionBarModeDisplay;
 
     public MainActivity() {
     }
@@ -45,10 +49,13 @@ public class MainActivity extends AppCompatActivity implements FragmentStatePage
         setContentView(R.layout.activity_main);
 
         mPrefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-//        if (mPrefs.getBoolean(VAL_FIRST_RUN, true)) {
-        WelcomeDialog dialog = new WelcomeDialog(this);
-        dialog.show();
-//        }
+        if (mPrefs.getBoolean(VAL_FIRST_RUN, true)) {
+            WelcomeDialog dialog = new WelcomeDialog(this);
+            dialog.show();
+        } else {
+            current_mode = CurrentMode.getMode(mPrefs.getString(VAL_CURRENT_MODE, CurrentMode.ENGLISH.getMode()));
+            actionBarModeDisplay.setText(current_mode.getDisplayText());
+        }
 
         // Set up the ViewPager with the sections adapter.
         MultiViewPager mViewPager = (MultiViewPager) findViewById(R.id.pager);
@@ -98,6 +105,10 @@ public class MainActivity extends AppCompatActivity implements FragmentStatePage
             }
         });
         googleProgressBar = (GoogleProgressBar) findViewById(R.id.google_progress);
+
+        switchMode = (ImageButton) findViewById(R.id.changeMode);
+        switchMode.setOnClickListener(this);
+        actionBarModeDisplay = (TextView) findViewById(R.id.action_bar_mode);
     }
 
     @Override
@@ -106,8 +117,21 @@ public class MainActivity extends AppCompatActivity implements FragmentStatePage
     }
 
     @Override
-    public void onSelect(String currentMode) {
+    public void onSelect(CurrentMode currentMode) {
+        mPrefs.edit().putBoolean(VAL_FIRST_RUN, false).putString(VAL_CURRENT_MODE, currentMode.getMode()).apply();
         current_mode = currentMode;
-//        adapter.notifyDataSetChanged();
+        actionBarModeDisplay.setText(currentMode.getDisplayText());
+        adapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onClick(View view) {
+        if (view.getId() == R.id.changeMode) {
+            if (current_mode == CurrentMode.ENGLISH) {
+                onSelect(CurrentMode.GREEK);
+            } else {
+                onSelect(CurrentMode.ENGLISH);
+            }
+        }
     }
 }

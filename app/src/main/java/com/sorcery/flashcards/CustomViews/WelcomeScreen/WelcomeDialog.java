@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v7.widget.CardView;
 import android.view.View;
 
+import com.sorcery.flashcards.Model.CurrentMode;
 import com.sorcery.flashcards.R;
 
 /**
@@ -14,8 +15,6 @@ import com.sorcery.flashcards.R;
 
 public class WelcomeDialog extends AlertDialog {
     private Context context;
-    private static final String ENG_MODE = "english_mode";
-    private static final String GREEK_MODE = "greek_mode";
     ClickInterface anInterface;
 
     public WelcomeDialog(Context context) {
@@ -34,7 +33,7 @@ public class WelcomeDialog extends AlertDialog {
         greekMode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                anInterface.onSelect(GREEK_MODE);
+                anInterface.onSelect(CurrentMode.GREEK);
                 dismiss();
             }
         });
@@ -43,7 +42,7 @@ public class WelcomeDialog extends AlertDialog {
         englishMode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                anInterface.onSelect(ENG_MODE);
+                anInterface.onSelect(CurrentMode.ENGLISH);
                 dismiss();
             }
         });
@@ -51,6 +50,6 @@ public class WelcomeDialog extends AlertDialog {
     }
 
     public interface ClickInterface {
-        void onSelect(String currentMode);
+        void onSelect(CurrentMode currentMode);
     }
 }

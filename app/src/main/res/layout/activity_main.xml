@@ -66,6 +66,7 @@
                 android:layout_centerInParent="true"
                 android:layout_marginEnd="24dp"
                 android:background="?android:attr/selectableItemBackground"
+                android:padding="8dp"
                 android:src="@drawable/ic_content_copy_white_24px" />
         </RelativeLayout>
 
