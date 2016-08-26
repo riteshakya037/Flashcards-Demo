@@ -29,6 +29,9 @@ public class ScreenSlidePageFragment extends Fragment implements View.OnClickLis
 
     TextView frontText;
     TextView backText;
+    MaterialRippleLayout pronunciationBtn;
+    MediaPlayer mp;
+
     /**
      * The fragment argument representing the section number for this
      * fragment.
@@ -73,34 +76,11 @@ public class ScreenSlidePageFragment extends Fragment implements View.OnClickLis
 
         frontText = (TextView) rootView.findViewById(R.id.frontText);
         backText = (TextView) rootView.findViewById(R.id.backText);
-        final MaterialRippleLayout pronunciationBtn = (MaterialRippleLayout) rootView.findViewById(R.id.pronunciationBtn);
+        pronunciationBtn = (MaterialRippleLayout) rootView.findViewById(R.id.pronunciationBtn);
         pronunciationBtn.setEnabled(false);
-        final MediaPlayer mp = new MediaPlayer();
-        try {
-            DatabaseContract.DbHelper dbHelper = new DatabaseContract.DbHelper(getActivity());
-            if (dbHelper.checkExist(cardModel.voiceMale)) {
-                mp.setDataSource(dbHelper.onSelect(cardModel.voiceMale));
-            } else {
-                mp.setDataSource(cardModel.voiceMale);
-            }
-            mp.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-                @Override
-                public void onPrepared(MediaPlayer mediaPlayer) {
-                    pronunciationBtn.setEnabled(true);
-                }
-            });
-            mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-                @Override
-                public void onCompletion(MediaPlayer mediaPlayer) {
-                    pronunciationBtn.setRadius(0);
-                }
-            });
-            mp.prepareAsync();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
 
-        updateCheckedStatus();
+
+        updateCheckedStatus(cardModel);
         pronunciationBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -136,9 +116,35 @@ public class ScreenSlidePageFragment extends Fragment implements View.OnClickLis
         rootLayout.startAnimation(flipAnimation);
     }
 
-    public void updateCheckedStatus() {
+    public void updateCheckedStatus(CardModel cardModel) {
+        this.cardModel = cardModel;
+        this.cardModel.setVisible(true);
         frontText.setText(current_mode == CurrentMode.GREEK ? cardModel.greekWord : cardModel.englishWord);
         backText.setText(current_mode == CurrentMode.GREEK ? cardModel.englishWord : cardModel.greekWord);
+        mp = new MediaPlayer();
+        try {
+            DatabaseContract.DbHelper dbHelper = new DatabaseContract.DbHelper(getActivity());
+            if (dbHelper.checkExist(cardModel.voiceMale)) {
+                mp.setDataSource(dbHelper.onSelect(cardModel.voiceMale));
+            } else {
+                mp.setDataSource(cardModel.voiceMale);
+            }
+            mp.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+                @Override
+                public void onPrepared(MediaPlayer mediaPlayer) {
+                    pronunciationBtn.setEnabled(true);
+                }
+            });
+            mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                @Override
+                public void onCompletion(MediaPlayer mediaPlayer) {
+                    pronunciationBtn.setRadius(0);
+                }
+            });
+            mp.prepareAsync();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public CardModel getData() {

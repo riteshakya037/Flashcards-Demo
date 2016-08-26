@@ -10,6 +10,8 @@ import com.sorcery.flashcards.Activities.ScreenSlidePageFragment;
 import com.sorcery.flashcards.Model.CardModel;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Random;
 import java.util.WeakHashMap;
 
 /**
@@ -43,13 +45,12 @@ public class FragmentStatePager extends FragmentStatePagerAdapter {
         return cards.size();
     }
 
-    @Override
-    public void notifyDataSetChanged() {
+    public void notifyChanged() {
         super.notifyDataSetChanged();
         for (Integer position : mFragments.keySet()) {
             //Make sure we only update fragments that should be seen
             if (position != null && mFragments.get(position) != null && mFragments.get(position).getData().isVisible()) {
-                mFragments.get(position).updateCheckedStatus();
+                mFragments.get(position).updateCheckedStatus(cards.get(position));
             }
         }
     }
@@ -67,6 +68,7 @@ public class FragmentStatePager extends FragmentStatePagerAdapter {
         if (!cards.contains(card)) {
             cards.add(card);
         }
+        anInterface.updateCount(cards.size());
         if (cards.size() > 0) {
             anInterface.isEmpty(false);
         }
@@ -75,13 +77,22 @@ public class FragmentStatePager extends FragmentStatePagerAdapter {
 
     public void removeCard(CardModel card) {
         cards.remove(card);
+        anInterface.updateCount(cards.size());
         if (cards.size() == 0) {
             anInterface.isEmpty(true);
         }
         this.notifyDataSetChanged();
     }
 
+    public void randomize() {
+        long seed = System.nanoTime();
+        Collections.shuffle(cards, new Random(seed));
+        this.notifyChanged();
+    }
+
     public interface EmptyInterface {
         void isEmpty(boolean isEmpty);
+
+        void updateCount(int count);
     }
 }

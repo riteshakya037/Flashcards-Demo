@@ -60,30 +60,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="sans-serif-condensed"
-                    android:text="@string/greek"
+                    android:text="@string/appbar_demo"
                     android:textAlignment="center"
                     android:textAppearance="@style/TextAppearance.AppCompat.Small" />
 
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="sans-serif-condensed"
-                    android:paddingLeft="8dp"
-                    android:paddingRight="8dp"
-                    android:text="@string/dash"
-                    android:textAlignment="center"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Small" />
-
-
-                <TextView
-                    android:id="@+id/action_bar_set"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="sans-serif-condensed"
-                    android:text="@string/set_1"
-                    android:textAlignment="center"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Small" />
 
             </LinearLayout>
 
@@ -123,5 +103,15 @@
 
     </android.support.design.widget.AppBarLayout>
 
-
+    <TextView
+        android:id="@+id/countDisplay"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center|bottom"
+        android:drawableLeft="@drawable/ic_shuffle_white_24px"
+        android:gravity="center"
+        android:padding="24dp"
+        android:background="?android:attr/selectableItemBackground"
+        android:text="@string/cards_count_format"
+        android:textColor="@color/cardview_light_background" />
 </android.support.design.widget.CoordinatorLayout>

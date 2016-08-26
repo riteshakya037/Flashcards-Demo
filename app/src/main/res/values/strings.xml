@@ -11,5 +11,6 @@
     <string name="greek">Greek</string>
     <string name="english">English</string>
     <string name="set_1">Set 1</string>
-    <string name="dash">-</string>
+    <string name="appbar_demo">%1$s - %2$s</string>
+    <string name="cards_count_format"> %1$d Cards</string>
 </resources>

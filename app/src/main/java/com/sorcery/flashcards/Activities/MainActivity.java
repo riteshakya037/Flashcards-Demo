@@ -38,6 +38,9 @@ public class MainActivity extends AppCompatActivity implements FragmentStatePage
     FragmentStatePager adapter;
     private ImageButton switchMode;
     private TextView actionBarModeDisplay;
+    private TextView countDisplay;
+    DatabaseReference databaseRef;
+    MultiViewPager mViewPager;
 
     public MainActivity() {
     }
@@ -55,11 +58,11 @@ public class MainActivity extends AppCompatActivity implements FragmentStatePage
             dialog.show();
         } else {
             current_mode = CurrentMode.getMode(mPrefs.getString(VAL_CURRENT_MODE, CurrentMode.ENGLISH.getMode()));
-            actionBarModeDisplay.setText(current_mode.getDisplayText());
+            actionBarModeDisplay.setText(getString(R.string.appbar_demo, current_mode.getDisplayText(), "Set 1"));
         }
 
         // Set up the ViewPager with the sections adapter.
-        MultiViewPager mViewPager = (MultiViewPager) findViewById(R.id.pager);
+        mViewPager = (MultiViewPager) findViewById(R.id.pager);
 
 
         // Get the Firebase app and all primitives we'll use
@@ -75,7 +78,7 @@ public class MainActivity extends AppCompatActivity implements FragmentStatePage
         mViewPager.setAdapter(adapter);
         mViewPager.setPageTransformer(true, new ZoomOutPageTransformer());
         // Get a reference to cards in the database
-        DatabaseReference databaseRef = database.getReference("cards/set1");
+        databaseRef = database.getReference("cards/set1");
         databaseRef.addChildEventListener(new ChildEventListener() {
             public void onChildAdded(DataSnapshot snapshot, String s) {
                 // Get the card from the snapshot and add it to the UI
@@ -109,6 +112,8 @@ public class MainActivity extends AppCompatActivity implements FragmentStatePage
 
         switchMode = (ImageButton) findViewById(R.id.changeMode);
         switchMode.setOnClickListener(this);
+        countDisplay = (TextView) findViewById(R.id.countDisplay);
+        countDisplay.setOnClickListener(this);
     }
 
     @Override
@@ -123,11 +128,16 @@ public class MainActivity extends AppCompatActivity implements FragmentStatePage
     }
 
     @Override
+    public void updateCount(int count) {
+        countDisplay.setText(getString(R.string.cards_count_format, count));
+    }
+
+    @Override
     public void onSelect(CurrentMode currentMode) {
         mPrefs.edit().putBoolean(VAL_FIRST_RUN, false).putString(VAL_CURRENT_MODE, currentMode.getMode()).apply();
         current_mode = currentMode;
-        actionBarModeDisplay.setText(currentMode.getDisplayText());
-        adapter.notifyDataSetChanged();
+        actionBarModeDisplay.setText(getString(R.string.appbar_demo, currentMode.getDisplayText(), "Set 1"));
+        adapter.notifyChanged();
     }
 
     @Override
@@ -138,6 +148,9 @@ public class MainActivity extends AppCompatActivity implements FragmentStatePage
             } else {
                 onSelect(CurrentMode.ENGLISH);
             }
+        } else if (view.getId() == R.id.countDisplay) {
+            adapter.randomize();
+            mViewPager.setCurrentItem(0, true);
         }
     }
 }
