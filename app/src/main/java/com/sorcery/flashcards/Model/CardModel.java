@@ -9,17 +9,40 @@ import android.os.Parcelable;
 
 public class CardModel implements Parcelable {
 
+    /**
+     * English word for individual card.
+     */
     public String englishWord;
+    /**
+     * Greek word for individual card.
+     */
     public String greekWord;
+    /**
+     * Greek Pronunciation for individual card (Text).
+     */
     public String pronunciationGreek;
+    /**
+     * Greek Pronunciation for individual card (Voice File).
+     */
     public String voiceMale;
 
-    private boolean visible = false;
-    private int position;
 
+    /**
+     * Default Constructor.
+     */
+    @SuppressWarnings("unused")
     public CardModel() {
     }
 
+    /**
+     * Firebase uses this constructor for initializing class.
+     *
+     * @param englishWord        English word for individual card.
+     * @param greekWord          Greek word for individual card.
+     * @param pronunciationGreek Greek Pronunciation for individual card (Text).
+     * @param voiceMale          Pronunciation for individual card (Voice File).
+     */
+    @SuppressWarnings("unused")
     public CardModel(String englishWord, String greekWord, String pronunciationGreek, String voiceMale) {
         this.englishWord = englishWord;
         this.greekWord = greekWord;
@@ -27,13 +50,19 @@ public class CardModel implements Parcelable {
         this.voiceMale = voiceMale;
     }
 
-    protected CardModel(Parcel in) {
+    /**
+     * @param in Parcelable object returned on state changes.
+     */
+    private CardModel(Parcel in) {
         englishWord = in.readString();
         greekWord = in.readString();
         pronunciationGreek = in.readString();
         voiceMale = in.readString();
     }
 
+    /**
+     * Create new object of state changes.
+     */
     public static final Creator<CardModel> CREATOR = new Creator<CardModel>() {
         @Override
         public CardModel createFromParcel(Parcel in) {
@@ -51,6 +80,12 @@ public class CardModel implements Parcelable {
         return 0;
     }
 
+    /**
+     * Parcelable object written on state changes.
+     *
+     * @param parcel Parcelable object in which state changes are written.
+     * @param i      Flags used to storing Parcelable object
+     */
     @Override
     public void writeToParcel(Parcel parcel, int i) {
         parcel.writeString(englishWord);
@@ -59,19 +94,4 @@ public class CardModel implements Parcelable {
         parcel.writeString(voiceMale);
     }
 
-    public boolean isVisible() {
-        return visible;
-    }
-
-    public void setVisible(boolean visible) {
-        this.visible = visible;
-    }
-
-    public void currentPos(int position) {
-        this.position = position;
-    }
-
-    public int getPosition() {
-        return position;
-    }
 }

@@ -2,30 +2,27 @@ package com.sorcery.flashcards.CustomViews.WelcomeScreen;
 
 import android.app.AlertDialog;
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v7.widget.CardView;
-import android.text.Spannable;
-import android.text.SpannableStringBuilder;
-import android.text.style.ImageSpan;
 import android.view.View;
-import android.widget.TextView;
 
 import com.sorcery.flashcards.Model.CurrentMode;
 import com.sorcery.flashcards.R;
 
 /**
+ * Welcome The user with a option to select the mode of usage.
+ * <p>
  * Created by Ritesh Shakya on 8/24/2016.
  */
 
 public class WelcomeDialog extends AlertDialog {
-    private Context context;
+    /**
+     * Callback listener which observers user selection.
+     */
     ClickInterface anInterface;
 
     public WelcomeDialog(Context context) {
         super(context);
-        this.context = context;
         this.anInterface = (ClickInterface) context;
     }
 
@@ -55,6 +52,9 @@ public class WelcomeDialog extends AlertDialog {
 
     }
 
+    /**
+     * Callback for when user clicks on either of the two modes.
+     */
     public interface ClickInterface {
         void onSelect(CurrentMode currentMode);
     }

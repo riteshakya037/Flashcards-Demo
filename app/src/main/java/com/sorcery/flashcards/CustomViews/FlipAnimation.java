@@ -8,15 +8,32 @@ import android.view.animation.Animation;
 import android.view.animation.Transformation;
 
 /**
+ * Flip animation for cards view. Switching between to view while changing camera.
+ * <p>
  * Created by Ritesh Shakya on 8/24/2016.
  */
 public class FlipAnimation extends Animation {
+    /**
+     * Change the camera of view while animating.
+     */
     private Camera camera;
 
+    /**
+     * Current active view
+     */
     private View fromView;
+    /**
+     * View to rotate to.
+     */
     private View toView;
 
+    /**
+     * Center X value of view
+     */
     private float centerX;
+    /**
+     * Center Y value of view.
+     */
     private float centerY;
 
     private boolean forward = true;
@@ -30,6 +47,9 @@ public class FlipAnimation extends Animation {
         setInterpolator(new AccelerateDecelerateInterpolator());
     }
 
+    /**
+     * Play animation in reverse.
+     */
     public void reverse() {
         forward = false;
         View switchView = toView;
@@ -50,7 +70,7 @@ public class FlipAnimation extends Animation {
         final double radians = Math.PI * interpolatedTime;
         float degrees = (float) (180.0 * radians / Math.PI);
 
-        if (interpolatedTime >= 0.5f) {
+        if (interpolatedTime >= 0.5f) { // Alternate the visibility of views at the exact half of animation duration.
             degrees -= 180.f;
             fromView.setVisibility(View.GONE);
             toView.setVisibility(View.VISIBLE);

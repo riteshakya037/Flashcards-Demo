@@ -13,4 +13,5 @@
     <string name="set_1">Set 1</string>
     <string name="appbar_demo">%1$s - %2$s</string>
     <string name="cards_count_format"> %1$d Cards</string>
+    <string name="_0_cards">0 cards</string>
 </resources>

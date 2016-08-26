@@ -3,6 +3,7 @@ package com.sorcery.flashcards.Activities;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.PagerAdapter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,18 +28,35 @@ import static com.sorcery.flashcards.Activities.MainActivity.current_mode;
  */
 public class ScreenSlidePageFragment extends Fragment implements View.OnClickListener {
 
+    /**
+     * Text Displayed on the frontSide onf the card. Not necessary the visible side.
+     */
     TextView frontText;
+    /**
+     * Text Displayed on the backSide onf the card.
+     */
     TextView backText;
+    /**
+     * Layout used as a button for pronunciation also has ripple effect.
+     */
     MaterialRippleLayout pronunciationBtn;
+    /**
+     * Stores the pronunciation of each card for playback.
+     */
     MediaPlayer mp;
 
     /**
-     * The fragment argument representing the section number for this
-     * fragment.
+     * The fragment argument representing the key for storing {@link CardModel} in {@link Bundle}
      */
     private static final String ARG_CARD = "section_card";
+    /**
+     * Has all the necessary data about the card to be displayed.
+     */
     private CardModel cardModel;
 
+    /**
+     * Default constructor to be used by Factory Method.
+     */
     public ScreenSlidePageFragment() {
     }
 
@@ -70,6 +88,7 @@ public class ScreenSlidePageFragment extends Fragment implements View.OnClickLis
         View rootView = inflater.inflate(R.layout.cards_fragment, container, false);
         RelativeLayout relativeLayout = (RelativeLayout) rootView.findViewById(R.id.vg_cover);
 
+        // Set the width of cards according to width of screen
         RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) relativeLayout.getLayoutParams();
         layoutParams.width = (int) (utils.getScreenWidth() * .8f);
         relativeLayout.setOnClickListener(this);
@@ -79,30 +98,34 @@ public class ScreenSlidePageFragment extends Fragment implements View.OnClickLis
         pronunciationBtn = (MaterialRippleLayout) rootView.findViewById(R.id.pronunciationBtn);
         pronunciationBtn.setEnabled(false);
 
-
+        // Instantiate the various views of the card.
         updateCheckedStatus(cardModel);
+
         pronunciationBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 mp.start();
             }
         });
-        cardModel.setVisible(true);
+
         return rootView;
     }
 
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        cardModel.setVisible(false);
-    }
 
+    /**
+     * Default callback method for {@link View#setOnClickListener(View.OnClickListener)} .
+     *
+     * @param view View that was clicked.
+     */
     @Override
     public void onClick(View view) {
         if (view.getId() == R.id.vg_cover)
             flipCard();
     }
 
+    /**
+     * Flips the card on each call.
+     */
     private void flipCard() {
         View rootLayout = getView().findViewById(R.id.vg_cover);
         View cardFace = getView().findViewById(R.id.cardFront);
@@ -116,29 +139,34 @@ public class ScreenSlidePageFragment extends Fragment implements View.OnClickLis
         rootLayout.startAnimation(flipAnimation);
     }
 
+    /**
+     * Update the fragment to reflect the change in data. Forced update since {@link PagerAdapter#notifyDataSetChanged()} doesnt update active fragments.
+     *
+     * @param cardModel
+     */
     public void updateCheckedStatus(CardModel cardModel) {
         this.cardModel = cardModel;
-        this.cardModel.setVisible(true);
         frontText.setText(current_mode == CurrentMode.GREEK ? cardModel.greekWord : cardModel.englishWord);
         backText.setText(current_mode == CurrentMode.GREEK ? cardModel.englishWord : cardModel.greekWord);
         mp = new MediaPlayer();
         try {
             DatabaseContract.DbHelper dbHelper = new DatabaseContract.DbHelper(getActivity());
-            if (dbHelper.checkExist(cardModel.voiceMale)) {
+            if (dbHelper.checkExist(cardModel.voiceMale)) { // If record exists on local database load from cache.
                 mp.setDataSource(dbHelper.onSelect(cardModel.voiceMale));
             } else {
-                mp.setDataSource(cardModel.voiceMale);
+                mp.setDataSource(cardModel.voiceMale); // Else load from web.
             }
+            dbHelper.close();
             mp.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
                 @Override
                 public void onPrepared(MediaPlayer mediaPlayer) {
-                    pronunciationBtn.setEnabled(true);
+                    pronunciationBtn.setEnabled(true); // Only enable if pronunciation has finished loading
                 }
             });
             mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                 @Override
                 public void onCompletion(MediaPlayer mediaPlayer) {
-                    pronunciationBtn.setRadius(0);
+                    pronunciationBtn.setRadius(0); // While playing display ripple effect. Dismiss on completion.
                 }
             });
             mp.prepareAsync();
@@ -147,6 +175,9 @@ public class ScreenSlidePageFragment extends Fragment implements View.OnClickLis
         }
     }
 
+    /**
+     * @return Current data of the fragment.
+     */
     public CardModel getData() {
         return cardModel;
     }

@@ -112,6 +112,6 @@
         android:gravity="center"
         android:padding="24dp"
         android:background="?android:attr/selectableItemBackground"
-        android:text="@string/cards_count_format"
+        android:text="@string/_0_cards"
         android:textColor="@color/cardview_light_background" />
 </android.support.design.widget.CoordinatorLayout>

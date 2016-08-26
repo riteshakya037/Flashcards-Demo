@@ -14,13 +14,18 @@ public class Utils {
 
     private final Context _context;
 
-    // constructor
+
+    /**
+     * Default Constructor
+     *
+     * @param context Activity context.
+     */
     public Utils(Context context) {
         this._context = context;
     }
 
-    /*
-     * getting screen width
+    /**
+     * Gets screen width
      */
     public int getScreenWidth() {
         int columnWidth;
@@ -38,12 +43,4 @@ public class Utils {
         columnWidth = point.x;
         return columnWidth;
     }
-
-
-    public float dpToPx(int i) {
-        Resources r = _context.getResources();
-        return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, i, r.getDisplayMetrics());
-    }
-
-
 }
