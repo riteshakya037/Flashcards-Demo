@@ -10,4 +10,6 @@
     <string name="click_to_flip_card">(Click to flip card)</string>
     <string name="greek">Greek</string>
     <string name="english">English</string>
+    <string name="set_1">Set 1</string>
+    <string name="dash">-</string>
 </resources>

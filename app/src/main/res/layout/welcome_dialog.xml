@@ -1,10 +1,9 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/rootView"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    tools:context="com.sorcery.flashcards.CustomViews.WelcomeScreen.ModeSelectionFragment">
+    android:layout_margin="24dp">
 
     <LinearLayout
         android:id="@+id/titleLayout"
@@ -31,11 +30,11 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/modeSelector"
         android:layout_width="match_parent"
         android:layout_height="250dp"
         android:layout_below="@id/titleLayout"
         android:gravity="center"
-        android:layout_margin="24dp"
         android:orientation="vertical">
 
 
@@ -43,7 +42,7 @@
             android:id="@+id/greekMode"
             android:layout_width="match_parent"
             android:layout_height="100dp"
-            android:layout_marginBottom="24dp"
+            android:layout_marginBottom="16dp"
             android:background="?android:attr/selectableItemBackground"
             app:cardBackgroundColor="@color/colorPrimaryDark"
             app:cardCornerRadius="10dp">
@@ -74,4 +73,35 @@
         </android.support.v7.widget.CardView>
     </LinearLayout>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/modeSelector"
+        android:gravity="center"
+        android:orientation="vertical">
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="You can also change this by pressing " />
+
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_content_copy_white_24px"
+                android:tint="@color/colorAccent" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=" on the top right corner" />
+        </LinearLayout>
+    </LinearLayout>
 </RelativeLayout>

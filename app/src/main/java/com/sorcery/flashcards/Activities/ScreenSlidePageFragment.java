@@ -14,15 +14,21 @@ import com.sorcery.flashcards.CustomViews.FlipAnimation;
 import com.sorcery.flashcards.Helper.DatabaseContract;
 import com.sorcery.flashcards.Helper.Utils;
 import com.sorcery.flashcards.Model.CardModel;
+import com.sorcery.flashcards.Model.CurrentMode;
 import com.sorcery.flashcards.R;
 
 import java.io.IOException;
+
+import static com.sorcery.flashcards.Activities.MainActivity.current_mode;
 
 /**
  * Created by Ritesh Shakya on 8/21/2016.
  * A placeholder fragment containing a simple view.
  */
 public class ScreenSlidePageFragment extends Fragment implements View.OnClickListener {
+
+    TextView frontText;
+    TextView backText;
     /**
      * The fragment argument representing the section number for this
      * fragment.
@@ -65,8 +71,8 @@ public class ScreenSlidePageFragment extends Fragment implements View.OnClickLis
         layoutParams.width = (int) (utils.getScreenWidth() * .8f);
         relativeLayout.setOnClickListener(this);
 
-        TextView frontText = (TextView) rootView.findViewById(R.id.frontText);
-        TextView backText = (TextView) rootView.findViewById(R.id.backText);
+        frontText = (TextView) rootView.findViewById(R.id.frontText);
+        backText = (TextView) rootView.findViewById(R.id.backText);
         final MaterialRippleLayout pronunciationBtn = (MaterialRippleLayout) rootView.findViewById(R.id.pronunciationBtn);
         pronunciationBtn.setEnabled(false);
         final MediaPlayer mp = new MediaPlayer();
@@ -94,15 +100,21 @@ public class ScreenSlidePageFragment extends Fragment implements View.OnClickLis
             e.printStackTrace();
         }
 
-        frontText.setText(cardModel.greekWord);
-        backText.setText(cardModel.englishWord);
+        updateCheckedStatus();
         pronunciationBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 mp.start();
             }
         });
+        cardModel.setVisible(true);
         return rootView;
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        cardModel.setVisible(false);
     }
 
     @Override
@@ -122,5 +134,14 @@ public class ScreenSlidePageFragment extends Fragment implements View.OnClickLis
             flipAnimation.reverse();
         }
         rootLayout.startAnimation(flipAnimation);
+    }
+
+    public void updateCheckedStatus() {
+        frontText.setText(current_mode == CurrentMode.GREEK ? cardModel.greekWord : cardModel.englishWord);
+        backText.setText(current_mode == CurrentMode.GREEK ? cardModel.englishWord : cardModel.greekWord);
+    }
+
+    public CardModel getData() {
+        return cardModel;
     }
 }

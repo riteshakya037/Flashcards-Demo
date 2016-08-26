@@ -15,7 +15,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.jpardogo.android.googleprogressbar.library.GoogleProgressBar;
-import com.sorcery.flashcards.Adaptors.FragmentStatePagerAdapter;
+import com.sorcery.flashcards.Adaptors.FragmentStatePager;
 import com.sorcery.flashcards.Adaptors.ZoomOutPageTransformer;
 import com.sorcery.flashcards.CustomViews.MultiViewPager;
 import com.sorcery.flashcards.CustomViews.WelcomeScreen.WelcomeDialog;
@@ -25,7 +25,7 @@ import com.sorcery.flashcards.Model.CardModel;
 import com.sorcery.flashcards.Model.CurrentMode;
 import com.sorcery.flashcards.R;
 
-public class MainActivity extends AppCompatActivity implements FragmentStatePagerAdapter.EmptyInterface, WelcomeDialog.ClickInterface, View.OnClickListener {
+public class MainActivity extends AppCompatActivity implements FragmentStatePager.EmptyInterface, WelcomeDialog.ClickInterface, View.OnClickListener {
     private GoogleProgressBar googleProgressBar;
     private DatabaseContract.DbHelper dbHelper;
     private String TAG = "MainActivity";
@@ -35,7 +35,7 @@ public class MainActivity extends AppCompatActivity implements FragmentStatePage
     private static final String VAL_FIRST_RUN = "first_run";
 
     public static CurrentMode current_mode;
-    FragmentStatePagerAdapter adapter;
+    FragmentStatePager adapter;
     private ImageButton switchMode;
     private TextView actionBarModeDisplay;
 
@@ -49,6 +49,7 @@ public class MainActivity extends AppCompatActivity implements FragmentStatePage
         setContentView(R.layout.activity_main);
 
         mPrefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        actionBarModeDisplay = (TextView) findViewById(R.id.action_bar_mode);
         if (mPrefs.getBoolean(VAL_FIRST_RUN, true)) {
             WelcomeDialog dialog = new WelcomeDialog(this);
             dialog.show();
@@ -69,12 +70,12 @@ public class MainActivity extends AppCompatActivity implements FragmentStatePage
         dbHelper = new DatabaseContract.DbHelper(this);
 
 
-        adapter = new FragmentStatePagerAdapter(getSupportFragmentManager(), this);
+        adapter = new FragmentStatePager(getSupportFragmentManager(), this);
 
         mViewPager.setAdapter(adapter);
         mViewPager.setPageTransformer(true, new ZoomOutPageTransformer());
         // Get a reference to cards in the database
-        DatabaseReference databaseRef = database.getReference("cards");
+        DatabaseReference databaseRef = database.getReference("cards/set1");
         databaseRef.addChildEventListener(new ChildEventListener() {
             public void onChildAdded(DataSnapshot snapshot, String s) {
                 // Get the card from the snapshot and add it to the UI
@@ -108,7 +109,12 @@ public class MainActivity extends AppCompatActivity implements FragmentStatePage
 
         switchMode = (ImageButton) findViewById(R.id.changeMode);
         switchMode.setOnClickListener(this);
-        actionBarModeDisplay = (TextView) findViewById(R.id.action_bar_mode);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        dbHelper.close();
     }
 
     @Override

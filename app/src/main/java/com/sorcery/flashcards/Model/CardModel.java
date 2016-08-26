@@ -2,7 +2,6 @@ package com.sorcery.flashcards.Model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.test.suitebuilder.annotation.Suppress;
 
 /**
  * Created by Ritesh Shakya on 8/21/2016.
@@ -14,6 +13,9 @@ public class CardModel implements Parcelable {
     public String greekWord;
     public String pronunciationGreek;
     public String voiceMale;
+
+    private boolean visible = false;
+    private int position;
 
     public CardModel() {
     }
@@ -55,5 +57,21 @@ public class CardModel implements Parcelable {
         parcel.writeString(greekWord);
         parcel.writeString(pronunciationGreek);
         parcel.writeString(voiceMale);
+    }
+
+    public boolean isVisible() {
+        return visible;
+    }
+
+    public void setVisible(boolean visible) {
+        this.visible = visible;
+    }
+
+    public void currentPos(int position) {
+        this.position = position;
+    }
+
+    public int getPosition() {
+        return position;
     }
 }
