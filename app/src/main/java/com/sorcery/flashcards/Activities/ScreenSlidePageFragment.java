@@ -18,6 +18,7 @@ import com.sorcery.flashcards.Model.CardModel;
 import com.sorcery.flashcards.Model.CurrentMode;
 import com.sorcery.flashcards.R;
 
+import java.io.File;
 import java.io.IOException;
 
 import static com.sorcery.flashcards.Activities.MainActivity.current_mode;
@@ -151,7 +152,7 @@ public class ScreenSlidePageFragment extends Fragment implements View.OnClickLis
         mp = new MediaPlayer();
         try {
             DatabaseContract.DbHelper dbHelper = new DatabaseContract.DbHelper(getActivity());
-            if (dbHelper.checkExist(cardModel.voiceMale)) { // If record exists on local database load from cache.
+            if (dbHelper.checkExist(cardModel.voiceMale) && new File(dbHelper.onSelect(cardModel.voiceMale)).exists()) { // If record exists on local database load from cache.
                 mp.setDataSource(dbHelper.onSelect(cardModel.voiceMale));
             } else {
                 mp.setDataSource(cardModel.voiceMale); // Else load from web.

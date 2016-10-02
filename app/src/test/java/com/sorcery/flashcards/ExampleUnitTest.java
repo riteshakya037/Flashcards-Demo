@@ -13,4 +13,9 @@ public class ExampleUnitTest {
         assertEquals(4, 2 + 2);
     }
 
+    @Test
+    public void name() throws Exception {
+        String string = "cards/set11";
+        assertEquals("Set " + string.replaceAll("[^\\d]+", ""), "Set 1");
+    }
 }
