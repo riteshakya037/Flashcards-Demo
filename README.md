@@ -20,6 +20,12 @@ Below I have given a list of everything that was used to build this project.
 * **Structural design patterns** - Adapter, Private Class Data
 * **Behavioral design patterns** - Chain of responsibility, Null Object, Observer 
 
+## ScreenShots
+* ![Language Selection Screen](device-2017-05-20-151825.png?raw=true "Language Selection Screen")
+* ![English Cards](device-2017-05-20-151838.png?raw=true "English Cards")
+* ![Greek Cards](device-2017-05-20-151847.png?raw=true "Greek Cards with pronunciation")
+
+
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
